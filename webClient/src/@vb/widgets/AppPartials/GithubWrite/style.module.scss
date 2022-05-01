@@ -1,0 +1,8 @@
+@import '@/mixins.scss';
+
+.editor {
+  :global(.ql-toolbar),
+  :global(.ql-container) {
+    border: none !important;
+  }
+}

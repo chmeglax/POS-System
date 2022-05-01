@@ -20,6 +20,8 @@ public class User {
   @Size(max = 20)
   private String username;
 
+  private String fName;
+  private String lName;
   @NotBlank
   @Size(max = 50)
   @Email
@@ -33,6 +35,15 @@ public class User {
   private Set<Role> roles = new HashSet<>();
 
   public User() {
+  }
+
+  public User(String id, String username, String fName, String lName, String email, String password) {
+    this.id = id;
+    this.username = username;
+    this.fName = fName;
+    this.lName = lName;
+    this.email = email;
+    this.password = password;
   }
 
   public User(String username, String email, String password) {

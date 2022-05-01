@@ -1,0 +1,51 @@
+@import '@/mixins.scss';
+
+/////////////////////////////////////////////////////////////////////////////////////////
+/*  HE-TREE-VUE */
+
+.tree {
+  &-placeholder-node {
+    min-height: rem(40);
+    border-radius: 4px;
+    background: $gray-1 !important;
+  }
+
+  &-node {
+    border: none !important;
+    padding: 0 !important;
+
+    &-item {
+      display: flex;
+
+      button {
+        border: none;
+        border-radius: 4px;
+        background: $gray-1;
+        width: rem(40);
+        height: rem(40);
+        display: block;
+      }
+    }
+
+    &-content {
+      padding: rem(8) 0 0 rem(15);
+    }
+  }
+}
+
+// dark theme
+[data-vb-theme='dark'] {
+  .tree {
+    &-placeholder-node {
+      background: $dark-gray-4 !important;
+    }
+
+    &-node {
+      &-item {
+        button {
+          background: $dark-gray-4;
+        }
+      }
+    }
+  }
+}
