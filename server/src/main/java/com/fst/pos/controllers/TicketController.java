@@ -18,15 +18,18 @@ import java.util.List;
 public class TicketController {
     @Autowired
     ProductService productService;
-
     @Autowired
     TicketService ticketService;
     @PostMapping
     public ResponseEntity<?> save(@RequestBody List<String> idsProducts) {
         List<Product> listProducts = new ArrayList<>();
         float total=0;
+        Product _p = new Product();
         for (int i = 0; i < idsProducts.size(); i++) {
-            listProducts.add(productService.findById(idsProducts.get(i)));
+            _p =productService.findById(idsProducts.get(i));
+            _p.setQuantity(_p.getQuantity()-1);
+            productService.update(_p);
+            listProducts.add(_p);
             total+=listProducts.get(i).getPrice();
         }
         Tickets _t = new Tickets();
