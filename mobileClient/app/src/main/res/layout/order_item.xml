@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+    <com.google.android.material.card.MaterialCardView
+
+        android:elevation="5dp"
+        app:cardElevation="5dp"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        app:cardCornerRadius="20dp"
+    android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/orderItemCardLayout"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    <androidx.gridlayout.widget.GridLayout
+
+        android:layout_width="386dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+
+        <TextView
+
+            android:id="@+id/itemName"
+            android:layout_width="187dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="5dp"
+
+            android:gravity="center_vertical"
+            android:text="Item name :"
+            app:layout_column="0"
+            app:layout_gravity="center_vertical"
+            app:layout_row="0" />
+
+        <TextView
+
+            android:id="@+id/quantity"
+            android:layout_width="143dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical"
+            android:text="Quantity :"
+            app:layout_column="1"
+            app:layout_gravity="center_vertical"
+            app:layout_row="0" />
+
+        <TextView
+            android:id="@+id/unitPrice"
+            android:layout_width="187dp"
+            android:layout_height="53dp"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical"
+            android:text="Unit price :"
+            app:layout_column="0"
+            app:layout_gravity="center_vertical"
+            app:layout_row="1" />
+
+        <TextView
+            android:id="@+id/totalItemCost"
+            android:layout_width="143dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical"
+            android:text="Total cost :"
+            app:layout_column="1"
+            app:layout_gravity="center_vertical"
+            app:layout_row="1" />
+
+        <ImageView
+            android:id="@+id/deleteItemBtn"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            app:layout_column="2"
+            app:layout_gravity="center"
+            app:layout_row="1"
+            app:srcCompat="@drawable/ic_trash"
+            android:elevation="20dp"/>
+
+
+    </androidx.gridlayout.widget.GridLayout>
+</com.google.android.material.card.MaterialCardView>
