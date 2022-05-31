@@ -73,15 +73,7 @@
             app:layout_gravity="center_vertical"
             app:layout_row="1" />
 
-        <ImageView
-            android:id="@+id/deleteItemBtn"
-            android:layout_width="30dp"
-            android:layout_height="wrap_content"
-            app:layout_column="2"
-            app:layout_gravity="center"
-            app:layout_row="1"
-            app:srcCompat="@drawable/ic_trash"
-            android:elevation="20dp"/>
+
 
 
     </androidx.gridlayout.widget.GridLayout>

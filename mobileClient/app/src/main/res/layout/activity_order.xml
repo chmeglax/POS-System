@@ -7,8 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".activities.HomeActivity">
 
-
-
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
@@ -62,7 +60,40 @@
             android:layout_marginTop="5dp"
             android:layout_height="wrap_content" />
 
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:id="@+id/totalLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="67dp">
+
+            <TextView
+                android:id="@+id/totalText"
+                android:gravity="center_vertical"
+                android:layout_width="69dp"
+                android:layout_height="31dp"
+                android:layout_marginLeft="20dp"
+
+                android:text="Total :"
+
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/totalCostValue"
+                android:layout_width="135dp"
+                android:layout_height="31dp"
+                android:gravity="center"
+                android:inputType="numberDecimal"
+                android:text="0"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
     </LinearLayout>
+
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/checkoutBtn"
