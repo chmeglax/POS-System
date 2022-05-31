@@ -14,9 +14,6 @@
         vb__layout__borderless: settings.isBorderless,
       }"
     >
-      <vb-variants />
-      <vb-sidebar />
-      <vb-support-chat />
       <vb-menu-classic v-if="settings.layoutMenu === 'classic'" />
       <vb-menu-flyout v-if="settings.layoutMenu === 'flyout'" />
       <vb-menu-simply v-if="settings.layoutMenu === 'simply'" />
@@ -82,9 +79,6 @@ export default {
     VbMenuFlyout,
     VbMenuSimply,
     VbTopbar,
-    VbSidebar,
-    VbSupportChat,
-    VbVariants,
     VbBreadcrumbs,
     VbBreadcrumbs2,
     VbFooter,
@@ -159,12 +153,12 @@ export default {
     // mobile slide bindings
     const bindMobileSlide = () => {
       // mobile menu touch slide opener
-      const unify = e => {
+      const unify = (e) => {
         return e.changedTouches ? e.changedTouches[0] : e
       }
       document.addEventListener(
         'touchstart',
-        e => {
+        (e) => {
           const x = unify(e).clientX
           touchStartPrev.value = x
           touchStartLocked.value = x > 70
@@ -173,7 +167,7 @@ export default {
       )
       document.addEventListener(
         'touchmove',
-        e => {
+        (e) => {
           const x = unify(e).clientX
           const prev = touchStartPrev.value
           if (x - prev > 50 && !touchStartLocked.value) {
