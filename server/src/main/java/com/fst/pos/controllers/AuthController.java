@@ -15,11 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.fst.pos.models.ERole;
 import com.fst.pos.models.Role;
@@ -89,7 +85,9 @@ public class AuthController {
 		// Create new user's account
 		User user = new User(signUpRequest.getUsername(), 
 							 signUpRequest.getEmail(),
-							 encoder.encode(signUpRequest.getPassword()));
+							 encoder.encode(signUpRequest.getPassword()),
+				signUpRequest.getfName(),
+				signUpRequest.getlName());
 
 		Set<String> strRoles = signUpRequest.getRoles();
 		Set<Role> roles = new HashSet<>();
@@ -125,5 +123,21 @@ public class AuthController {
 		userRepository.save(user);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+	}
+
+	@GetMapping("/")
+	public ResponseEntity<List<?>> findAll() {
+		List<?> list = userRepository.findAll();
+		return ResponseEntity.ok().body(list);
+	}
+	@PutMapping("/")
+	public ResponseEntity<?> update(@RequestBody User user) {
+		User updatedSuperHero = userRepository.save(user);
+		return ResponseEntity.ok().body(updatedSuperHero);
+	}
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> delete(@PathVariable String id) {
+		userRepository.deleteById(id);
+		return ResponseEntity.ok().body("Deleted successfully...!");
 	}
 }

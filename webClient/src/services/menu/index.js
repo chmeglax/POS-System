@@ -34,7 +34,12 @@ export const getMenuData = [
        },
      ],
    },*/
-
+  {
+    title: 'Caissiers',
+    key: 'Caissiers',
+    url: '/users',
+    icon: 'fe fe-users',
+  },
   {
     title: 'Produits',
     key: 'Produits',

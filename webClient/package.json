@@ -3,7 +3,7 @@
   "version": "0.9.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve --port 9091",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "prettier": "prettier --write \"src/**/*.{vue,js,jsx,ts,tsx,scss,less}\"",
@@ -28,6 +28,7 @@
     "lodash": "^4.17.20",
     "moment": "^2.29.3",
     "nprogress": "^0.2.0",
+    "qrcode-vue3": "^1.4.17",
     "qs": "^6.9.6",
     "readline-sync": "^1.4.10",
     "register-service-worker": "^1.7.1",

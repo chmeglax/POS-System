@@ -3,10 +3,13 @@ package com.fst.pos.controllers;
 import com.fst.pos.models.Product;
 import com.fst.pos.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -17,6 +20,7 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody Product product) {
+        product.setCreatedDate(new Date());
         Product savedProduct = productService.save(product);
         return ResponseEntity.ok().body(savedProduct);
     }
@@ -33,10 +37,18 @@ public class ProductController {
         return ResponseEntity.ok().body(product);
     }
 
-    @PutMapping
-    public ResponseEntity<?> update(@RequestBody Product product) {
-        Product updatedSuperHero = productService.update(product);
-        return ResponseEntity.ok().body(updatedSuperHero);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@PathVariable String id,@RequestBody Product product) {
+        Optional<Product> productData = Optional.ofNullable(productService.findById(id));
+        if (productData.isPresent()) {
+            Product _product = productData.get();
+            _product.setPrice(product.getPrice());
+            _product.setName(product.getName());
+            _product.setQuantity(product.getQuantity());
+            return new ResponseEntity<>(productService.update(_product), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 

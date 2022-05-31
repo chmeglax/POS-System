@@ -28,6 +28,11 @@ const router = createRouter({
           meta: { title: 'Produits' },
           component: () => import('./views/produit'),
         },
+        {
+          path: '/users',
+          meta: { title: 'Caissiers' },
+          component: () => import('./views/users'),
+        },
         // VB:REPLACE-END:ROUTER-CONFIG
       ],
     },

@@ -4,7 +4,7 @@
       <div class="col-lg-12">
         <div class="card-placeholder">
           <div class="card-header">
-            <vb-headers-heading :data="{ title: 'Gérer les produits' }" />
+            <vb-headers-heading :data="{ title: 'Gérer les users' }" />
           </div>
         </div>
       </div>
@@ -13,7 +13,7 @@
       <div class="col-lg-12">
         <div class="card">
           <div class="card-header">
-            <vb-headers-card-header :data="{ title: 'Liste des produits' }" />
+            <vb-headers-card-header :data="{ title: 'Liste des users' }" />
           </div>
           <div class="card-body">
             <a-button type="primary" shape="round" :size="size" @click="showDrawer">
@@ -77,23 +77,6 @@
                     {{ text }}
                   </template>
                 </template>
-                <template #expandedRowRender="{ record }">
-                  <QRCodeVue3
-                    :width="200"
-                    :height="200"
-                    :value="record.id"
-                    :qrOptions="{ typeNumber: 0, mode: 'Byte', errorCorrectionLevel: 'H' }"
-                    :imageOptions="{ hideBackgroundDots: true, imageSize: 0.4, margin: 0 }"
-                    :dotsOptions="{
-                      type: 'classy',
-                    }"
-                    :backgroundOptions="{ color: '#ffffff' }"
-                    :cornersSquareOptions="{ type: 'classy', color: '#000000' }"
-                    :cornersDotOptions="{ type: undefined, color: '#000000' }"
-                    fileExt="png"
-                    :download="true"
-                  />
-                </template>
                 <template #action="{ record }">
                   <span>
                     <a class="btn btn-sm btn-light mr-2" @click="editT(record)">
@@ -114,7 +97,7 @@
     </div>
     <!-- add drawer -->
     <a-drawer
-      title="Ajouter un produit"
+      title="Ajouter un caissier"
       :width="720"
       :visible="visible"
       :body-style="{ paddingBottom: '80px' }"
@@ -126,22 +109,36 @@
       <a-form :model="form" :rules="rules" layout="vertical">
         <a-row :gutter="16">
           <a-col :span="24">
-            <a-form-item label="nom du produit" name="name">
-              <a-input v-model:value="form.name" placeholder="Saisir le nom" />
+            <a-form-item label="Nom" name="lName">
+              <a-input v-model:value="form.lName" placeholder="Saisir le nom" />
             </a-form-item>
           </a-col>
         </a-row>
         <a-row :gutter="16">
           <a-col :span="24">
-            <a-form-item label="prix unitaire" name="price">
-              <a-input v-model:value="form.price" placeholder="Saisir une valeur" />
+            <a-form-item label="Prénom" name="fName">
+              <a-input v-model:value="form.fName" placeholder="Saisir une valeur" />
             </a-form-item>
           </a-col>
         </a-row>
         <a-row :gutter="16">
           <a-col :span="24">
-            <a-form-item label="Quantité" name="quantity">
-              <a-input v-model:value="form.quantity" placeholder="Saisir une valeur" />
+            <a-form-item label="email" name="email">
+              <a-input v-model:value="form.email" placeholder="Saisir une valeur" />
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-row :gutter="16">
+          <a-col :span="24">
+            <a-form-item label="username" name="username">
+              <a-input v-model:value="form.username" placeholder="Saisir une valeur" />
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-row :gutter="16">
+          <a-col :span="24">
+            <a-form-item label="Mot de passe" name="password">
+              <a-input-password v-model:value="form.password" placeholder="Saisir une valeur" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -156,7 +153,7 @@
     <!-- edit drawer -->
 
     <a-drawer
-      title="Modifier un produit"
+      title="Modifier un user"
       :width="720"
       :visible="visibleEdit"
       :body-style="{ paddingBottom: '80px' }"
@@ -168,25 +165,29 @@
       <a-form :model="activeProduct" :rules="rules" layout="vertical">
         <a-row :gutter="16">
           <a-col :span="24">
-            <a-form-item label="nom" name="name">
-              <a-input v-model:value="activeProduct.name" placeholder="Saisir le nom" />
+            <a-form-item label="Nom" name="lName">
+              <a-input v-model:value="activeProduct.lName" placeholder="Saisir le nom" />
             </a-form-item>
           </a-col>
         </a-row>
         <a-row :gutter="16">
           <a-col :span="24">
-            <a-form-item label="Prix unitaire" name="price">
-              <a-input-number v-model:value="activeProduct.price" placeholder="Saisir une valeur" />
+            <a-form-item label="Prénom" name="fName">
+              <a-input v-model:value="activeProduct.fName" placeholder="Saisir une valeur" />
             </a-form-item>
           </a-col>
         </a-row>
         <a-row :gutter="16">
           <a-col :span="24">
-            <a-form-item label="Quantité actuel" name="quantity">
-              <a-input-number
-                v-model:value="activeProduct.quantity"
-                placeholder="Saisir une valeur"
-              />
+            <a-form-item label="email" name="email">
+              <a-input v-model:value="activeProduct.email" placeholder="Saisir une valeur" />
+            </a-form-item>
+          </a-col>
+        </a-row>
+        <a-row :gutter="16">
+          <a-col :span="24">
+            <a-form-item label="username" name="username">
+              <a-input v-model:value="activeProduct.username" placeholder="Saisir une valeur" />
             </a-form-item>
           </a-col>
         </a-row>
@@ -209,29 +210,27 @@ import moment from 'moment'
 import { SearchOutlined, UserAddOutlined } from '@ant-design/icons-vue'
 import { defineComponent, reactive, ref } from 'vue'
 import ApiClient from '@/services/axios'
-import QRCodeVue3 from 'qrcode-vue3'
 export default defineComponent({
   components: {
     VbHeadersHeading,
     VbHeadersCardHeader,
     UserAddOutlined,
     SearchOutlined,
-    QRCodeVue3,
   },
   setup() {
     const searchInput = ref()
     const columns = [
       {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
+        title: 'Nom',
+        dataIndex: 'lName',
+        key: 'lName',
         slots: {
           filterDropdown: 'filterDropdown',
           filterIcon: 'filterIcon',
           customRender: 'customRender',
         },
         onFilter: (value, record) =>
-          record.name.toString().toLowerCase().includes(value.toLowerCase()),
+          record.lName.toString().toLowerCase().includes(value.toLowerCase()),
         onFilterDropdownVisibleChange: (visible) => {
           if (visible) {
             setTimeout(() => {
@@ -241,16 +240,16 @@ export default defineComponent({
         },
       },
       {
-        title: 'prix',
-        dataIndex: 'price',
-        key: 'price',
+        title: 'Prénom',
+        dataIndex: 'fName',
+        key: 'fName',
         slots: {
           filterDropdown: 'filterDropdown',
           filterIcon: 'filterIcon',
           customRender: 'customRender',
         },
         onFilter: (value, record) =>
-          record.price.toString().toLowerCase().includes(value.toLowerCase()),
+          record.fName.toString().toLowerCase().includes(value.toLowerCase()),
         onFilterDropdownVisibleChange: (visible) => {
           if (visible) {
             setTimeout(() => {
@@ -260,16 +259,16 @@ export default defineComponent({
         },
       },
       {
-        title: 'Quantité actuel',
-        dataIndex: 'quantity',
-        key: 'quantity',
+        title: 'email',
+        dataIndex: 'email',
+        key: 'email',
         slots: {
           filterDropdown: 'filterDropdown',
           filterIcon: 'filterIcon',
           customRender: 'customRender',
         },
         onFilter: (value, record) =>
-          record.quantity.toString().toLowerCase().includes(value.toLowerCase()),
+          record.email.toString().toLowerCase().includes(value.toLowerCase()),
         onFilterDropdownVisibleChange: (visible) => {
           if (visible) {
             setTimeout(() => {
@@ -279,16 +278,16 @@ export default defineComponent({
         },
       },
       {
-        title: "Date d'ajout",
-        dataIndex: 'createdDate',
-        key: 'createdDate',
+        title: 'UserName',
+        dataIndex: 'username',
+        key: 'username',
         slots: {
           filterDropdown: 'filterDropdown',
           filterIcon: 'filterIcon',
-          customRender: 'date',
+          customRender: 'customRender',
         },
         onFilter: (value, record) =>
-          record.createdDate.toString().toLowerCase().includes(value.toLowerCase()),
+          record.username.toString().toLowerCase().includes(value.toLowerCase()),
         onFilterDropdownVisibleChange: (visible) => {
           if (visible) {
             setTimeout(() => {
@@ -309,8 +308,8 @@ export default defineComponent({
     const tableLoading = ref(true)
     const dataSource = ref([])
 
-    //get produits
-    ApiClient.get('/product/')
+    //get users
+    ApiClient.get('/auth/')
       .then((res) => {
         dataSource.value = res.data
       })
@@ -334,22 +333,22 @@ export default defineComponent({
     }
 
     const deleteT = (record) => {
-      ApiClient.delete('/product/' + record.id)
+      ApiClient.delete('/auth/' + record.id)
         .then((res) => {
           dataSource.value = dataSource.value.filter((e) => {
             return e.id !== record.id
           })
-          message.success('Produit supprimé avec succées ! ')
+          message.success('user supprimé avec succées ! ')
         })
         .catch((e) => {
           message.success('veuillez réesseilez ! ')
         })
     }
     const addT = () => {
-      ApiClient.post('/product/', form)
+      ApiClient.post('/auth/signup', form)
         .then((res) => {
-          dataSource.value.push(res.data)
-          message.success('Produit ajouté avec succées ! ')
+          dataSource.value.push(form)
+          message.success('user ajouté avec succées ! ')
           visible.value = false
         })
         .catch((e) => {
@@ -359,9 +358,11 @@ export default defineComponent({
     }
     //drawer actions
     const form = reactive({
-      name: '',
-      price: '',
-      quantity: '',
+      email: '',
+      fName: '',
+      lName: '',
+      username: '',
+      password: '',
     })
     const rules = {
       name: [
@@ -402,34 +403,40 @@ export default defineComponent({
     }
     //edit drawer
     const activeProduct = reactive({
-      name: '',
-      price: 0,
-      quantity: 0,
+      id: '',
+      email: '',
+      fName: '',
+      lName: '',
+      username: '',
+      password: '',
     })
     const visibleEdit = ref(false)
     const editT = (record) => {
       activeProduct.value = JSON.parse(JSON.stringify(record))
-      activeProduct.name = record.name
-      activeProduct.price = parseFloat(record.price)
-      activeProduct.quantity = parseInt(record.quantity)
+      activeProduct.id = record.id
+      activeProduct.email = record.email
+      activeProduct.fName = record.fName
+      activeProduct.lName = record.lName
+      activeProduct.username = record.username
       visibleEdit.value = true
     }
     const saveT = () => {
       console.log(activeProduct)
-      ApiClient.put('/product/' + activeProduct.value.id, activeProduct)
+      ApiClient.put('/auth/', activeProduct)
         .then((res) => {
           dataSource.value = dataSource.value.map((elem) =>
             elem.id == activeProduct.value.id
               ? {
                   ...elem,
-                  price: activeProduct.price,
-                  quantity: activeProduct.quantity,
-                  name: activeProduct.name,
+                  email: activeProduct.email,
+                  fName: activeProduct.fName,
+                  lName: activeProduct.lName,
+                  username: activeProduct.username,
                 }
               : elem,
           )
           //activeProduct.value = res.data
-          message.success('Produit modifié ! ')
+          message.success('user modifié ! ')
         })
         .catch((e) => {
           console.log(e)
@@ -439,9 +446,7 @@ export default defineComponent({
           visibleEdit.value = false
         })
     }
-    const qrCode = (record) => {
-      console.log(record)
-    }
+
     return {
       columns,
       handleSearch,
@@ -463,7 +468,6 @@ export default defineComponent({
       visibleEdit,
       saveT,
       moment,
-      qrCode,
     }
   },
 })
