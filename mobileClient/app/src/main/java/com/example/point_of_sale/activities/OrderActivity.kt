@@ -13,18 +13,20 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.point_of_sale.R
-import com.example.point_of_sale.adapters.OrderItemsAdapter
+import com.example.point_of_sale.adapters.ProductAdapter
 import com.example.point_of_sale.helpers.SwipeToDeleteCallback
 import com.example.point_of_sale.models.OrderItem
+import com.example.point_of_sale.models.Product
 import com.example.point_of_sale.network.ApiInterface
 import com.google.zxing.integration.android.IntentIntegrator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class OrderActivity : AppCompatActivity() {
-    private var items = arrayListOf<OrderItem>()
-    private var adapter : RecyclerView.Adapter<OrderItemsAdapter.ViewHolder>? = null
+    private var items = arrayListOf<Product>()
+    private var adapter : RecyclerView.Adapter<ProductAdapter.ViewHolder>? = null
     private var layoutManager : RecyclerView.LayoutManager? = null
     private var totalCostView : TextView? = null
     private var totalCost : Double = 0.0
@@ -33,40 +35,18 @@ class OrderActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_order)
-        CoroutineScope(Dispatchers.IO).launch {
-            try{
-                val apiInterface = ApiInterface.create()
-                var response=apiInterface.getProductById("6294ea4e84bcaa3fef995d7b")
-                if (response.isSuccessful && response.body() != null) {
-                    val content = response.body()
-                    System.out.println(content?.toString())
-                } else {
-                    System.out.println(response.message())
-                    Toast.makeText(
-                        this@OrderActivity,
-                        "Error Occurred: ${response.message()}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
 
-            } catch (e: Exception) {
-                System.err.println(e.message)
-                Toast.makeText(
-                    this@OrderActivity,
-                    "Error Occurred: ${e.message}",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-
-        }
         //----
         layoutManager = LinearLayoutManager(this)
         var recyclerView = findViewById<RecyclerView>(R.id.orderItemRecyclerView)
         recyclerView.layoutManager = layoutManager
-        adapter = OrderItemsAdapter(items)
+        adapter = ProductAdapter(items)
         recyclerView.adapter = adapter
         totalCostView = findViewById(R.id.totalCostValue)
+
         listenerSetup()
+
+
 
 
         val swipeToDeleteCallback = object : SwipeToDeleteCallback(){
@@ -112,12 +92,32 @@ class OrderActivity : AppCompatActivity() {
                 .setPositiveButton("Confirm", DialogInterface.OnClickListener { _, _ ->
                     //TODO Api CALL
                     val productId = result.contents
+                    var newProduct : Product? = null
+                    CoroutineScope(Dispatchers.IO).launch {
+                        try {
+                            val apiInterface = ApiInterface.create()
+                            var response = apiInterface.getProductById(productId)
+                            if (response.isSuccessful && response.body() != null) {
+                                val content = response.body()
+                                if (content != null) {
+                                    val productName = content.name
+                                    val quantity =
+                                        Integer.parseInt(quantityEditText.text.toString())
+                                    val unitPrice = content.price
+                                    newProduct = Product(productId, productName, unitPrice, quantity)
+                                    withContext(Dispatchers.Main){ // Calls the main thread
+                                        insertItem(newProduct!!)
+                                    }
+                                }
+                            } else {
+                                Log.e("HI", response.message())
+                            }
+                        } catch (e: Exception) {
+                            System.err.println(e.message)
+                        }
+                    }
 
-                    Toast.makeText(this, "Product Added", Toast.LENGTH_SHORT)
-                    val productName = "BBBB"
-                    val quantity = Integer.parseInt(quantityEditText.text.toString())
-                    val unitPrice = 1.0
-                    insertItem(OrderItem(productName, quantity , unitPrice,quantity * unitPrice))
+
 
                 })
                 .setNegativeButton("Cancel",DialogInterface.OnClickListener { _, _ ->  })
@@ -125,21 +125,18 @@ class OrderActivity : AppCompatActivity() {
                 .show()
         }
     }
-    private fun insertItem(newItem : OrderItem){
-
-
-
-
+    private fun insertItem(newItem : Product){
         items.add(newItem)
-        totalCost += newItem.quantity * newItem.unitPrice
+        println(items)
+        adapter?.notifyItemInserted(items.size)
+        totalCost += (newItem.quantity?.times(newItem.price)!! ?: 0) as Double
         totalCostView?.text = "$totalCost"
 
-        adapter?.notifyDataSetChanged()
     }
     fun removeItem(position : Int){
         val removedItem  = items[position]
         items.removeAt(position)
-        totalCost -= removedItem.unitPrice * removedItem.quantity
+        totalCost -= (removedItem.quantity?.times(removedItem.price)!! ?: 0) as Double
         totalCostView?.text = "$totalCost"
         adapter?.notifyItemRemoved(position)
 

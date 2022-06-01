@@ -21,6 +21,7 @@
             android:layout_width="fill_parent"
             android:layout_height="60dp">
             <com.google.android.material.appbar.MaterialToolbar
+                android:visibility="visible"
                 android:id="@+id/toolbar2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

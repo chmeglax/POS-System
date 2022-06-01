@@ -17,7 +17,7 @@ interface ApiInterface {
 
     companion object {
 
-            val BASE_URL = "http://192.168.1.4:8090/api/"
+            val BASE_URL = "http://192.168.1.19:8090/api/"
 
             fun create() : ApiInterface {
 

@@ -9,8 +9,9 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.point_of_sale.R
 import com.example.point_of_sale.models.OrderItem
+import com.example.point_of_sale.models.Product
 
-class OrderItemsAdapter(private val items : List<OrderItem>) : RecyclerView.Adapter<OrderItemsAdapter.ViewHolder>() {
+class ProductAdapter(private val items : List<Product>) : RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
 
 
@@ -21,10 +22,11 @@ class OrderItemsAdapter(private val items : List<OrderItem>) : RecyclerView.Adap
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) { //populate data to cardview
-        holder.itemName.text = items[position].productName
+        holder.id = items[position].id
+        holder.name.text = items[position].name
         holder.quantity.text = "Quantity : ".plus(items[position].quantity)
-        holder.totalItemCost.text = "Total cost : ".plus(items[position].totalCost)
-        holder.unitPrice.text = "Unit Price :".plus(items[position].unitPrice)
+        holder.totalItemCost.text = "Total cost : ".plus(items[position].quantity?.times(items[position].price))
+        holder.price.text = "Unit Price :".plus(items[position].price)
     }
 
     override fun getItemCount(): Int {
@@ -34,23 +36,16 @@ class OrderItemsAdapter(private val items : List<OrderItem>) : RecyclerView.Adap
 
 
     inner class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
-        var itemName : TextView
+        var id : String? = null
+        var name : TextView
         var quantity : TextView
-        var unitPrice : TextView
+        var price : TextView
         var totalItemCost : TextView
         init{ //Initialization code for the instance
-            itemName = itemView.findViewById(R.id.itemName)
+            name = itemView.findViewById(R.id.itemName)
             quantity = itemView.findViewById(R.id.quantity)
-            unitPrice = itemView.findViewById(R.id.unitPrice)
+            price = itemView.findViewById(R.id.unitPrice)
             totalItemCost = itemView.findViewById(R.id.totalItemCost)
-
-            itemView.setOnClickListener{
-                val position : Int = adapterPosition
-                Toast.makeText(itemView.context, "itemName ${items[position].productName} quantity ${items[position].quantity} " +
-                        "unitPrice ${items[position].unitPrice} totalItemCost ${items[position].totalCost}", Toast.LENGTH_SHORT).show()
-            }
-
-
         }
     }
 }
