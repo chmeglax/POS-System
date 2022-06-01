@@ -18,6 +18,10 @@ import com.example.point_of_sale.helpers.SwipeToDeleteCallback
 import com.example.point_of_sale.models.OrderItem
 import com.example.point_of_sale.network.ApiInterface
 import com.google.zxing.integration.android.IntentIntegrator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
 class OrderActivity : AppCompatActivity() {
     private var items = arrayListOf<OrderItem>()
     private var adapter : RecyclerView.Adapter<OrderItemsAdapter.ViewHolder>? = null
@@ -29,7 +33,33 @@ class OrderActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_order)
-        val apiInterface = ApiInterface.create()
+        CoroutineScope(Dispatchers.IO).launch {
+            try{
+                val apiInterface = ApiInterface.create()
+                var response=apiInterface.getProductById("6294ea4e84bcaa3fef995d7b")
+                if (response.isSuccessful && response.body() != null) {
+                    val content = response.body()
+                    System.out.println(content?.toString())
+                } else {
+                    System.out.println(response.message())
+                    Toast.makeText(
+                        this@OrderActivity,
+                        "Error Occurred: ${response.message()}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+
+            } catch (e: Exception) {
+                System.err.println(e.message)
+                Toast.makeText(
+                    this@OrderActivity,
+                    "Error Occurred: ${e.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+
+        }
+        //----
         layoutManager = LinearLayoutManager(this)
         var recyclerView = findViewById<RecyclerView>(R.id.orderItemRecyclerView)
         recyclerView.layoutManager = layoutManager
@@ -96,6 +126,10 @@ class OrderActivity : AppCompatActivity() {
         }
     }
     private fun insertItem(newItem : OrderItem){
+
+
+
+
         items.add(newItem)
         totalCost += newItem.quantity * newItem.unitPrice
         totalCostView?.text = "$totalCost"
